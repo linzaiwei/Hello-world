@@ -1,0 +1,62 @@
+GIT常用命令总结：
+
+git分布式管理系统，一般开发模式如下：
+项目开始阶段，初始化项目（init），提交本地代码到仓库，将本地仓库代码推送到远端服务器。
+
+项目开发人员从远端服务器克隆代码到本机（clone）,此时本地仅有一个master分支，新建dev分支并切换、在dev分支中进行开发工作，其实就是修改并提交代码（add+commit）；当开发的dev分支的代码没问题时，将dev分支合并（merge）到master；将master推送到远端分支，至此，其他的项目开发人员就可以查看到你提交的代码了！
+
+dev分支也可以是修复某个bug或者为了开发某个issue建立的，当bug已经修复或issue开发完成时，把dev合并到master之后，就可以把它删除了。
+
+git命令总结：
+
+git init:创建一个git仓库，创建之后就会在当前目录生成一个.git的文件。
+
+git add filename:把文件添加到缓冲区，其中可以使用git add .或者git add --all添加所有文件。
+
+git rm filename:删除文件。
+
+git commit -m "提交说明":提交缓冲器的所有修改到仓库，commit可以一次提交缓冲区的所有文件。
+
+git status:查看git库的状态，未提交的文件，分为两种，add过已经在缓冲区的，未add过的。
+
+git diff filename:如果文件修改了，还没有提交，就可以比较文件修改前后的差异。
+
+git log:查看日志。
+
+git reset --hard HEAD^:回退到上一个版本（HEAD代表当前版本，有一个^代表上一个版本）。
+git reset --hard d7b5:回退到指定版本(其中d7b5是想回退的指定版本号的前几位)。
+
+git reflog:查看仓库的操作历史，此命令可以查看版本信息，并配合git reset回退版本。
+
+git branch:查看分支的情况，前面带*号的就是当前分支。
+
+git branch branch-name:创建分支。
+
+git checkout branch-name:切换到指定分支。
+
+git checkout -b branch-name:创建分支并切换到新创建的分支。
+
+git merge branch-name:合并某分支的内容到当前分支。
+
+git branch -d branch-name:删除某个分支。
+
+git tag tag-name version:新建标签，用于标记版本备注，比如稳定版。
+
+git tag:显示所有标签。
+
+git show tag:查看标签的详细信息。
+
+git push origin --tags:推送所有标签。
+git push origin v1.0:推送某个标签。
+
+git push -u origin master:将本地仓库内容推送到远端仓库(-u 表示第一次推送master分支的所有内容，后面再推送就不需要-u了)，跟commit的区别在于一个是提交到本地仓库，一个是提交到远程仓库。
+
+git pull:从远端库更新内容到本地。
+
+提交git时，忽略部分IDE产生的文件，在根目录下创建.gitignore文件，注意：新加.gitignore只能忽略那些原来没有被提交过的文件，如果某些文件已经被纳入了版本管理中，则修改.gitignore是无效的。在文件中添加，例如：
+/**/target
+/**/.project
+/**/.classpath
+
+git查看某一段时间更新代码量的命令
+git log --since=2018-09.01 --until=2018-09.27 --author="$(git config --get user.name)" --pretty=tformat: --numstat | gawk '{ add += $1 ; subs += $2 ; loc += $1 - $2 } END { printf "added lines: %s removed lines : %s total lines: %s\n",add,subs,loc }' -
